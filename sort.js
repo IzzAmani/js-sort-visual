@@ -79,6 +79,10 @@ function execute() {
         case "merge":
             var promise = merge();
             break;
+
+        case "bogo":
+            var promise = bogo();
+            break;
     }
 
     promise.then(() => {console.log("gay"); finish()});
@@ -194,6 +198,40 @@ async function merge(start=0, end=arr.length-1) {
 }
 
 
+async function bogo() {
+    var sorted = false;
+
+    while (!sorted) {
+        // randomize the array
+        for (var i=arr.length-1; i > 0; i--) {
+            var rand = Math.floor(Math.random() * (i+1) );
+
+            [arr[i], arr[rand]] = [arr[rand], arr[i]];
+        }
+
+        sorted = true;
+
+        // check if arr is sorted
+        for (var i=0; i < arr.length-1; i++) {
+            if (arr[i] > arr[i+1]) {
+                sorted = false;
+                break;
+            }
+        }
+        
+        var highlights = [];
+        var limit = Math.random() * arr.length/10;
+
+        for (var i=0; i < limit; i++) {
+            highlights.push( Math.floor(Math.random() * arr.length-1) );
+        }
+
+        display(highlights);
+        await sleep(delay);
+    }
+}
+
+
 async function finish() {
     for (var i in arr) {
         display([i, i+1], "lime");
@@ -203,15 +241,3 @@ async function finish() {
 
 
 initBars(countInp.value, 0);
-
-
-var a = [1, 2, 3];
-
-function test(b) {
-    console.log("hey", b);
-    b[1] = 4;
-    return b;
-}
-
-var c = test(a.slice(1));
-console.log("hi", a, c);
